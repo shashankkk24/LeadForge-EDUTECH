@@ -1,42 +1,53 @@
 # FastAPI and web framework
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
+fastapi
+uvicorn[standard]
 
 # Database
-sqlalchemy==2.0.23
-asyncpg==0.29.0
-alembic==1.13.0
-aiosqlite==0.19.0  # For testing with SQLite
+sqlalchemy
+asyncpg
+alembic
+aiosqlite  # For testing with SQLite
 
 # Data validation
-pydantic==2.5.0
-pydantic-settings==2.1.0
+pydantic
+pydantic-settings
 
 # AI/ML
-google-generativeai==0.3.0  # Gemini API
-spacy==3.7.2  # NLP
+google-generativeai  # Gemini API
 
 # Web scraping
-praw==7.7.0  # Reddit API
-requests==2.31.0
+praw  # Reddit API
+requests
+selenium  # Browser automation for LinkedIn and JS-heavy sites
+apify-client  # Apify platform SDK
+beautifulsoup4  # HTML parsing
+lxml  # XML/HTML processing
+playwright  # Alternative browser automation
+webdriver-manager  # Automatic chromedriver/geckodriver management
+
+# LinkedIn
+linkedin-api  # Unofficial LinkedIn API wrapper
+# linkedin-sdk  # Alternative official SDK
 
 # Email
-python-multipart==0.0.6
+python-multipart
+aiosmtplib  # Async SMTP client for non-blocking email
+secure-smtplib  # Enhanced SMTP with security
 
 # CORS
-python-cors==1.10.0
+# (using FastAPI builtin)
 
 # Async utilities
-python-dotenv==1.0.0
+python-dotenv
 
 # Testing
-pytest==7.4.3
-pytest-asyncio==0.21.1
+pytest
+pytest-asyncio
 
 # Logging and monitoring
-python-json-logger==2.0.7
+python-json-logger
 
 # Development
-black==23.12.0
-flake8==6.1.0
-mypy==1.7.1
+black
+flake8
+mypy

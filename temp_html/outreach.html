@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LeadForge EDU Outreach Engine</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-card": "#FFFFFF",
+                        "surface-container-highest": "#e4e2e4",
+                        "priority-hot": "#EF4444",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#7c839b",
+                        "surface-dim": "#dcd9db",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f6f3f5",
+                        "on-tertiary-container": "#b87500",
+                        "on-surface": "#1b1b1d",
+                        "inverse-primary": "#bec6e0",
+                        "surface-bright": "#fcf8fa",
+                        "outline-variant": "#c6c6cd",
+                        "tertiary-container": "#2a1700",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "status-drafted": "#8B5CF6",
+                        "secondary": "#0051d5",
+                        "background": "#fcf8fa",
+                        "primary": "#000000",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "status-closed": "#64748B",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-tint": "#565e74",
+                        "on-secondary-fixed": "#00174b",
+                        "priority-cold": "#3B82F6",
+                        "on-surface-variant": "#45464d",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#bec6e0",
+                        "surface-bg": "#F8FAFC",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#fefcff",
+                        "primary-fixed": "#dae2fd",
+                        "secondary-fixed": "#dbe1ff",
+                        "status-contacted": "#10B981",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "inverse-surface": "#303032",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#f3f0f2",
+                        "surface": "#fcf8fa",
+                        "border-subtle": "#E2E8F0",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e4e2e4",
+                        "surface-container-high": "#eae7e9",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "surface-container": "#f0edef",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#131b2e",
+                        "priority-warm": "#F97316",
+                        "status-new": "#6366F1",
+                        "on-primary-fixed": "#131b2e",
+                        "secondary-container": "#316bf3",
+                        "on-background": "#1b1b1d",
+                        "on-tertiary-fixed": "#2a1700",
+                        "outline": "#76777d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "0.75rem",
+                        "container-margin": "2rem",
+                        "gutter": "1.5rem",
+                        "card-padding": "1.25rem",
+                        "section-gap": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "h2": ["Manrope"],
+                        "data-mono": ["Space Grotesk"],
+                        "body-sm": ["Inter"],
+                        "body-base": ["Inter"],
+                        "h1": ["Manrope"],
+                        "h3": ["Manrope"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "data-mono": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "body-sm": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-base": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h3": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F8FAFC;
+        }
+    </style>
+</head>
+<body class="font-body-base text-on-surface">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col h-screen p-4 gap-2 z-50">
+<div class="flex items-center gap-3 px-2 mb-6">
+<div class="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-slate-900 dark:text-white leading-none">LeadForge EDU</h1>
+<p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mt-1">AI Sales Engine</p>
+</div>
+</div>
+<button class="w-full py-2.5 px-4 mb-4 bg-blue-600 text-white rounded-lg font-manrope text-sm font-semibold flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Pipeline
+            </button>
+<nav class="space-y-1 flex-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-manrope text-sm font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="search_insights">search_insights</span>
+<span class="font-manrope text-sm font-semibold">Lead Scraper</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-manrope text-sm font-semibold">Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg font-manrope text-sm font-semibold transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+                    Outreach
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+<span class="font-manrope text-sm font-semibold">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-manrope text-sm font-semibold">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+<span class="font-manrope text-sm font-semibold">Account</span>
+</a>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="ml-64 flex flex-col flex-1 overflow-hidden">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 flex justify-between items-center px-6 h-16 w-full bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-white border border-border-subtle rounded-lg px-3 py-1.5 w-80">
+<span class="material-symbols-outlined text-slate-400 text-lg mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none text-sm focus:ring-0 p-0 w-full placeholder:text-slate-400" placeholder="Search outreach history..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-px bg-slate-200 mx-1"></div>
+<button class="px-4 py-2 bg-blue-600 text-white rounded-lg font-manrope text-sm font-medium tracking-tight hover:bg-blue-700 active:scale-95 duration-150">
+                        Start Scrape
+                    </button>
+<img alt="User Profile" class="w-9 h-9 rounded-full object-cover border border-slate-200" data-alt="Professional headshot of a sales executive in a modern office setting with soft natural lighting and blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRCw2q3a2wMG3KufmiQJ2NQc4qSFYiTfduNkvo-sCvZCDYbwEcTye1ZrIEgEDatxfnelxaV4rEOEZ7G41LbR0uvywmZlAZ-YII4pGQkn-JlBj4aBpN9F-1frR2uZNAcYm3nhzEgrTb0Da7Kw6WkoqH1QoAIjSx1J_dM6hGz5hnFI_Y9Ariaf-mt8AchUSMD0YJlgN4GlPtHtpBkiJZgJJkB7Sxpi1HBtSDXezBV4j8nebgxLx_uX3mAIAF5nNTk4HDeDTS8MTpt2w"/>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Left Pane: HOT Leads -->
+<section class="w-80 flex flex-col border-r border-slate-200 bg-white">
+<div class="p-4 border-b border-slate-200 flex items-center justify-between">
+<h2 class="font-h2 text-h2 text-slate-900">HOT Leads</h2>
+<span class="bg-priority-hot/10 text-priority-hot text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Priority</span>
+</div>
+<div class="flex-1 overflow-y-auto p-2 space-y-2">
+<!-- Lead Card 1 Active -->
+<div class="p-3 rounded-xl border-2 border-blue-600 bg-blue-50/50 cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<img alt="Lead Profile" class="w-10 h-10 rounded-lg object-cover" data-alt="Close-up portrait of a professional corporate educator in a bright, modern office with tech accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjfImCWpcJuUFbRYGZqKt6k-CRSuy9dR8Mv8orlqFAlC29mzEgGUL-57-B89J_TEUX8gVj1c4hgWEnSF8I06mUAxydLp-yBzDDvxAM2zjljTDFlihtlp01ZhJY9rBuqamaYhYedD7n6SRMOEcju77aCbrg0nj7UeyeH2G5DhGMpIrSOEw6cUkSzGy5Wf3G1J65PR3bEhD01YfYVmVxGW_Czod29JLrAfICvkjeNiOHxmrDw-NpN3cZgLfq2p6K6vis5exBRvQMUo0"/>
+<span class="bg-priority-hot text-white text-[10px] font-bold px-2 py-0.5 rounded-full">HOT</span>
+</div>
+<h4 class="font-h3 text-sm text-slate-900 mb-1">Dr. Aris Thorne</h4>
+<p class="font-body-sm text-xs text-slate-500 mb-3 truncate">Head of Dept, Stanford Edu</p>
+<div class="flex flex-wrap gap-1 mb-2">
+<span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-medium text-slate-600">curriculum_gap</span>
+<span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-medium text-slate-600">ai_readiness</span>
+</div>
+<p class="text-[11px] text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule">schedule</span> 12m ago
+                            </p>
+</div>
+<!-- Lead Card 2 -->
+<div class="p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<img alt="Lead Profile" class="w-10 h-10 rounded-lg object-cover" data-alt="Modern professional woman with glasses looking focused in a clean, minimalist workspace environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgQnY7fmC7bLx-1lMbXf4yMIOxxbQT8gZOLJD1Ni54Gncqo7Rp1oeUnmGIaJPKYg3-0xlmIQNUHb-yCzhiSd3Yt7ywKeXzbUhHknrmahhtnQRL5jOnZ7Yf9lyYvl4M8eer8bLI8kM25v-HsP00pLBiANPluGFiQZQBTZF342hY3hDgZoYl8eWViECXFNglmjluFteXujNdtRv8yMiFbJvjdVgIlh4tS2GIl55mRKeOg5rYc1u39GBU_YPiqyEPVGDN3dSllTWD1w8"/>
+<span class="bg-priority-hot/10 text-priority-hot text-[10px] font-bold px-2 py-0.5 rounded-full">HOT</span>
+</div>
+<h4 class="font-h3 text-sm text-slate-900 mb-1">Sarah Jenkins</h4>
+<p class="font-body-sm text-xs text-slate-500 mb-3 truncate">Director of Admissions, MIT</p>
+<div class="flex flex-wrap gap-1 mb-2">
+<span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-medium text-slate-600">pipeline_leak</span>
+</div>
+<p class="text-[11px] text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule">schedule</span> 2h ago
+                            </p>
+</div>
+<!-- Lead Card 3 -->
+<div class="p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-2">
+<img alt="Lead Profile" class="w-10 h-10 rounded-lg object-cover" data-alt="Confident executive man in professional attire with soft studio lighting and clean grey background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoVFw1WWBbtGxPIbJ2yJzSN-GmedDhm2qPdnlkSF6_YF8icSRaNSr-Y3mvEsSysd61eZ1UBraAR0Z9hU5pTeLOK6elg3Y3HL7c_fzNxXM9e4Q-DiTVqFNo1mevQhNv7O_sz3hfZ7EXbChaRgNco6Wx_9KQC3Wt6hnQW5dN3qyurJ6XyCv3v4ZIWFEIq4YMQYYrIpC7jlfUrt4QgNdtb9QazB7syKQVPKHUyvIQTnN-MB5kpynT7gUCvHDut9UdW2YCtR9mwAiWENA"/>
+<span class="bg-priority-hot/10 text-priority-hot text-[10px] font-bold px-2 py-0.5 rounded-full">HOT</span>
+</div>
+<h4 class="font-h3 text-sm text-slate-900 mb-1">Marcus Vane</h4>
+<p class="font-body-sm text-xs text-slate-500 mb-3 truncate">CEO, LearnFlow Platforms</p>
+<div class="flex flex-wrap gap-1 mb-2">
+<span class="px-2 py-0.5 bg-white border border-slate-200 rounded text-[10px] font-medium text-slate-600">scale_bottleneck</span>
+</div>
+<p class="text-[11px] text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule">schedule</span> 5h ago
+                            </p>
+</div>
+</div>
+</section>
+<!-- Right Pane: Contextual AI Outreach Generator -->
+<section class="flex-1 flex flex-col bg-slate-50 overflow-y-auto">
+<!-- Workspace Header -->
+<div class="p-6 bg-white border-b border-slate-200">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-blue-600" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h2 class="font-h2 text-h2 text-slate-900">Contextual AI Outreach</h2>
+</div>
+<p class="font-body-base text-slate-500">Drafting hyper-personalized message for Dr. Aris Thorne based on recent LinkedIn engagement.</p>
+</div>
+<div class="p-6 grid grid-cols-12 gap-6">
+<!-- Lead Intelligence Context (Left Col) -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+<h3 class="font-label-caps text-label-caps text-slate-400 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="info">info</span> LEAD CONTEXT
+                                </h3>
+<div class="bg-slate-50 rounded-lg p-4 border border-slate-100 italic text-sm text-slate-600 mb-4">
+                                    "Traditional LMS architectures are failing our current enrollment surge. We need something that scales with AI logic, not just server space."
+                                    <div class="mt-2 text-[11px] text-slate-400 font-medium">— Posted on LinkedIn (12m ago)</div>
+</div>
+<div class="space-y-3">
+<div>
+<label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Identified Pain Points</label>
+<div class="flex flex-wrap gap-2">
+<span class="bg-red-50 text-red-600 text-[11px] px-2 py-1 rounded border border-red-100 font-medium">Scalability Crisis</span>
+<span class="bg-blue-50 text-blue-600 text-[11px] px-2 py-1 rounded border border-blue-100 font-medium">LMS Obsolescence</span>
+</div>
+</div>
+<div>
+<label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">AI Recommendation</label>
+<p class="text-xs text-slate-600 leading-relaxed">Focus on 'Automated Enrollment Logic' and 'Elastic Architecture'. Mention the recent Stanford case study.</p>
+</div>
+</div>
+</div>
+<div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-label-caps text-label-caps text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span> STATUS LOG
+                                    </h3>
+<span class="flex items-center gap-1.5 text-[10px] text-emerald-500 font-bold uppercase">
+<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Live
+                                    </span>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-emerald-500 text-lg" data-icon="check_circle">check_circle</span>
+<div>
+<p class="text-xs font-semibold text-slate-800">Sent to Marcus Vane</p>
+<p class="text-[10px] text-slate-400">SMTP delivered • 4m ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-emerald-500 text-lg" data-icon="check_circle">check_circle</span>
+<div>
+<p class="text-xs font-semibold text-slate-800">Sent to Sarah Jenkins</p>
+<p class="text-[10px] text-slate-400">SMTP delivered • 1h ago</p>
+</div>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-blue-500 text-lg" data-icon="drafts">drafts</span>
+<div>
+<p class="text-xs font-semibold text-slate-800">Draft saved: Elena Rossi</p>
+<p class="text-[10px] text-slate-400">Manual review req • 2h ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Outreach Generator (Right Col) -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<div class="bg-white rounded-xl border border-slate-200 shadow-xl overflow-hidden">
+<div class="bg-slate-900 p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-red-400"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+<div class="w-3 h-3 rounded-full bg-green-400"></div>
+<span class="text-[11px] font-data-mono text-slate-400 ml-2">OUTREACH_MODAL_v2.4</span>
+</div>
+<div class="flex items-center gap-2 text-[11px] text-blue-400 font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[14px]" data-icon="auto_fix">auto_fix</span>
+                                        AI Optimized
+                                    </div>
+</div>
+<div class="p-6 space-y-4">
+<div>
+<label class="font-label-caps text-label-caps text-slate-400 block mb-2 uppercase">Subject Line</label>
+<input class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent" type="text" value="Scaling enrollment logic at Stanford: Beyond server capacity"/>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-slate-400 block mb-2 uppercase">Message Body</label>
+<div class="relative">
+<textarea class="w-full bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm leading-relaxed text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows="12">Hi Dr. Thorne,
+
+I saw your recent post regarding LMS architectures failing under current enrollment surges. It's a common bottleneck we're seeing in Tier-1 EDU environments right now.
+
+At LeadForge, we've developed an automated enrollment engine that focuses on intelligence-first scaling. Instead of just adding server space, our platform uses elastic logic to prioritize departmental needs in real-time—similar to how you described the gap in your LinkedIn post.
+
+We recently helped the MIT admissions board reduce their latency by 42% using this specific AI outreach logic.
+
+Would you be open to a 5-minute technical brief on how we can bridge that curriculum gap?
+
+Best,
+LeadForge Sales Engine</textarea>
+<div class="absolute bottom-4 right-4 flex gap-2">
+<button class="p-2 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-blue-600 hover:border-blue-200 transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="refresh">refresh</span>
+</button>
+<button class="p-2 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-blue-600 hover:border-blue-200 transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="translate">translate</span>
+</button>
+</div>
+</div>
+</div>
+<div class="pt-4 flex items-center justify-between border-t border-slate-100">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-[11px] font-bold text-slate-500 uppercase tracking-widest">SMTP Connected: mail.leadforge.edu</span>
+</div>
+<div class="flex gap-3">
+<button class="px-5 py-2.5 border border-slate-200 rounded-lg font-manrope text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors active:scale-95 duration-150">
+                                                Edit Draft
+                                            </button>
+<button class="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-manrope text-sm font-bold flex items-center gap-2 hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-95 duration-150">
+<span class="material-symbols-outlined text-sm" data-icon="send">send</span>
+                                                Send via SMTP
+                                            </button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-blue-600/5 border border-blue-100 rounded-xl p-4 flex items-start gap-4">
+<div class="bg-blue-600/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-blue-600" data-icon="lightbulb">lightbulb</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-blue-900 mb-1">Engagement Tip</h4>
+<p class="text-xs text-blue-800/80 leading-relaxed">Leads mentioning "LMS Failure" have a 68% higher conversion rate when contacted within 30 minutes of their social post. You are currently in the prime window.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

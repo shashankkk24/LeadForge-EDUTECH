@@ -17,12 +17,18 @@ from config import get_settings
 settings = get_settings()
 
 
+# Clean up the URL for asyncpg compatibility
+db_url = settings.DATABASE_URL
+if "?" in db_url:
+    db_url = db_url.split("?")[0]
+
 # Create async engine
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    db_url,
     echo=settings.DEBUG,
     poolclass=NullPool,  # Disable connection pooling for Neon
     future=True,
+    connect_args={"ssl": True}
 )
 
 # Create async session factory
@@ -57,6 +63,7 @@ async def init_db():
         from models import Base
 
         # Create all tables
+        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
 

@@ -1,204 +1,163 @@
-"""
-Scraper API router.
-Handles POST /scrape endpoint to trigger scraping jobs and lead extraction.
-"""
+"""Scraper router — POST /scrape triggers background Reddit scrape."""
 
 import asyncio
+import json
 import logging
+from datetime import datetime
 from typing import List
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import schemas
-from config import get_settings
-from database import get_db
-from models import Lead
+from database import get_db, AsyncSessionLocal
+from models import Lead, ScrapeJob
 from services.nlp_service import NLPService
 from services.scoring_service import ScoringService
 from services.scraper_service import ScraperService
-from websocket.manager import WebSocketManager
+from services.gemini_service import GeminiService
+from socket_manager import ws_manager   # singleton
 
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/scrape", tags=["scraper"])
-
-settings = get_settings()
-ws_manager = WebSocketManager()
+logger        = logging.getLogger(__name__)
+router        = APIRouter(prefix="/scrape", tags=["scraper"])
+nlp_service   = NLPService()
+gemini_svc    = GeminiService()
 
 
 @router.post("", response_model=schemas.ScrapeJobResponse)
 async def trigger_scrape(
     request: schemas.ScrapeJobCreate,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
-    background_tasks: BackgroundTasks = None,
 ) -> dict:
-    """
-    Trigger a scraping job.
+    scraper = ScraperService()
+    job     = await scraper.create_scrape_job(db, request.platform, request.keywords)
+    job_id  = str(job.id)
 
-    Request Body:
-    - platform: Platform to scrape (reddit, twitter, forum)
-    - keywords: List of keywords to search for
-
-    Returns:
-        ScrapeJob object with job ID and initial status
-    """
-    logger.info(f"Received scrape request for {request.platform} with keywords: {request.keywords}")
-
-    # Create scraper service
-    scraper = ScraperService(
-        client_id=settings.REDDIT_CLIENT_ID,
-        client_secret=settings.REDDIT_CLIENT_SECRET,
-    )
-
-    # Create scrape job record
-    job = await scraper.create_scrape_job(db, request.platform, request.keywords)
-
-    # Add background task to perform scraping
-    if background_tasks:
-        background_tasks.add_task(
-            _perform_scrape,
-            job_id=str(job.id),
-            platform=request.platform,
-            keywords=request.keywords,
-            scraper=scraper,
-            db=db,
-        )
-
-    logger.info(f"Created scrape job {job.id}")
+    background_tasks.add_task(_perform_scrape, job_id, request.platform, request.keywords)
 
     return {
-        "id": str(job.id),
-        "platform": job.platform,
-        "keywords": job.keywords,
-        "status": job.status,
-        "started_at": job.started_at,
-        "completed_at": job.completed_at,
-        "leads_found": job.leads_found,
+        "id": job_id, "platform": job.platform, "keywords": job.keywords,
+        "status": job.status, "started_at": job.started_at,
+        "completed_at": job.completed_at, "leads_found": job.leads_found,
         "error_message": job.error_message,
     }
 
 
-async def _perform_scrape(
-    job_id: str,
-    platform: str,
-    keywords: List[str],
-    scraper: ScraperService,
-    db: AsyncSession,
-):
-    """
-    Perform scraping in background and update database.
+async def _perform_scrape(job_id: str, platform: str, keywords: List[str]):
+    """Background worker — own DB session, no shared state with HTTP request."""
+    scraper = ScraperService()
 
-    Args:
-        job_id: ID of the scrape job
-        platform: Platform to scrape
-        keywords: Keywords to search
-        scraper: ScraperService instance
-        db: Database session
-    """
-    try:
-        # Update job status
-        await scraper.update_scrape_job(db, job_id, "running")
-        await ws_manager.broadcast_job_status(job_id, "running", 0)
+    async with AsyncSessionLocal() as session:
+        try:
+            await scraper.update_scrape_job(session, job_id, "running")
+            await ws_manager.broadcast_job_status(job_id, "running", 0)
 
-        # Scrape leads
-        logger.info(f"Starting scrape job {job_id} on {platform}")
-        raw_leads = await scraper.scrape_reddit(keywords, limit=5)
+            raw_leads = await scraper.scrape(platform, keywords, limit=10)
+            logger.info(f"Job {job_id}: {len(raw_leads)} raw leads scraped")
 
-        # Process and save leads
-        nlp_service = NLPService()
-        leads_created = 0
+            leads_created = 0
+            for raw in raw_leads:
+                try:
+                    content      = raw.get("post_content", "")
+                    url          = raw.get("post_url", "")
+                    extracted_at = raw.get("extracted_at", datetime.utcnow())
 
-        for raw_lead in raw_leads:
+                    # NLP (local, instant)
+                    pain_tags     = nlp_service.extract_pain_points(content, max_tags=3)
+                    detected_role = nlp_service.detect_role(content)
+                    urgency       = nlp_service.detect_urgency(content)
+                    sentiment     = nlp_service.calculate_sentiment(content)
+
+                    # Gemini intent — hard 6s timeout, fall back to mock immediately
+                    try:
+                        res = await asyncio.wait_for(gemini_svc.classify_intent(content), timeout=6.0)
+                        intent_label = res.get("intent_label", "RESEARCH_PHASE")
+                    except Exception:
+                        intent_label = gemini_svc._mock_intent_response(content).get("intent_label", "RESEARCH_PHASE")
+
+                    # Gemini pain points if NLP found nothing
+                    if not pain_tags:
+                        try:
+                            res2 = await asyncio.wait_for(gemini_svc.extract_pain_points(content), timeout=6.0)
+                            pain_tags = res2.get("pain_point_tags", [])
+                        except Exception:
+                            pain_tags = gemini_svc._mock_pain_points_response(content).get("pain_point_tags", [])
+
+                    lead = Lead(
+                        platform=raw.get("platform", "reddit"),
+                        username=raw.get("username", "unknown"),
+                        post_url=url,
+                        post_content=content,
+                        extracted_at=extracted_at,
+                        pain_point_tags=json.dumps(pain_tags),
+                        detected_role=detected_role,
+                        urgency_level=urgency,
+                        sentiment_score=sentiment,
+                        intent_label=intent_label,
+                        status="New",
+                    )
+                    score, priority = ScoringService.calculate_lead_score(lead)
+                    lead.lead_score = score
+                    lead.priority   = priority
+
+                    session.add(lead)
+                    await session.flush()   # get UUID without full commit
+
+                    leads_created += 1
+
+                    await ws_manager.broadcast_new_lead({
+                        "id":              str(lead.id),
+                        "platform":        lead.platform,
+                        "username":        lead.username,
+                        "post_url":        lead.post_url,
+                        "post_content":    lead.post_content,
+                        "pain_point_tags": pain_tags,
+                        "detected_role":   lead.detected_role,
+                        "urgency_level":   lead.urgency_level,
+                        "sentiment_score": lead.sentiment_score,
+                        "intent_label":    lead.intent_label,
+                        "lead_score":      lead.lead_score,
+                        "priority":        lead.priority,
+                        "status":          lead.status,
+                        "ai_subject":      None,
+                        "ai_message":      None,
+                        "notes":           None,
+                        "extracted_at":    extracted_at.isoformat(),
+                        "created_at":      extracted_at.isoformat(),
+                        "updated_at":      extracted_at.isoformat(),
+                        "sent_at":         None,
+                    })
+                    await asyncio.sleep(0.05)
+
+                except Exception as e:
+                    logger.error(f"Lead processing error: {e}", exc_info=True)
+                    continue
+
+            await session.commit()
+            await scraper.update_scrape_job(session, job_id, "completed", leads_created)
+            await ws_manager.broadcast_job_status(job_id, "completed", leads_created)
+            logger.info(f"Job {job_id}: DONE — {leads_created} leads")
+
+        except Exception as e:
+            logger.error(f"Job {job_id} FAILED: {e}", exc_info=True)
             try:
-                # Extract NLP features
-                pain_points = nlp_service.extract_pain_points(raw_lead["post_content"], max_tags=3)
-                detected_role = nlp_service.detect_role(raw_lead["post_content"])
-                urgency = nlp_service.detect_urgency(raw_lead["post_content"])
-                sentiment = nlp_service.calculate_sentiment(raw_lead["post_content"])
-
-                # Create lead object
-                lead = Lead(
-                    platform=raw_lead["platform"],
-                    username=raw_lead["username"],
-                    post_url=raw_lead["post_url"],
-                    post_content=raw_lead["post_content"],
-                    extracted_at=raw_lead["extracted_at"],
-                    pain_point_tags=pain_points,
-                    detected_role=detected_role,
-                    urgency_level=urgency,
-                    sentiment_score=sentiment,
-                    status="New",
-                    intent_label="RESEARCH_PHASE",  # Default, overridden by Gemini
-                )
-
-                # Calculate lead score
-                score, priority = ScoringService.calculate_lead_score(lead)
-                lead.lead_score = score
-                lead.priority = priority
-
-                db.add(lead)
-                leads_created += 1
-
-                # Broadcast new lead via WebSocket
-                await ws_manager.broadcast_new_lead(
-                    {
-                        "id": str(lead.id),
-                        "username": lead.username,
-                        "priority": lead.priority,
-                        "score": lead.lead_score,
-                        "pain_points": lead.pain_point_tags,
-                    }
-                )
-
-            except Exception as e:
-                logger.error(f"Error processing lead: {e}")
-                continue
-
-        # Commit all leads
-        await db.commit()
-
-        # Update job status
-        await scraper.update_scrape_job(db, job_id, "completed", leads_created)
-        await ws_manager.broadcast_job_status(job_id, "completed", leads_created)
-
-        logger.info(f"Scrape job {job_id} completed. Created {leads_created} leads.")
-
-    except Exception as e:
-        logger.error(f"Error in scrape job {job_id}: {e}")
-        await scraper.update_scrape_job(db, job_id, "failed", error_message=str(e))
-        await ws_manager.broadcast_job_status(job_id, "failed", 0)
+                await scraper.update_scrape_job(session, job_id, "failed", error_message=str(e))
+            except Exception:
+                pass
+            await ws_manager.broadcast_job_status(job_id, "failed", 0)
 
 
 @router.get("/jobs/{job_id}", response_model=schemas.ScrapeJobResponse)
-async def get_scrape_job(job_id: str, db: AsyncSession = Depends(get_db)) -> dict:
-    """
-    Get scrape job status.
-
-    Path Parameters:
-    - job_id: ID of the scrape job
-
-    Returns:
-        ScrapeJob object with current status
-    """
+async def get_scrape_job(job_id: str, db: AsyncSession = Depends(get_db)):
     from sqlalchemy import select
-
-    from models import ScrapeJob
-
     result = await db.execute(select(ScrapeJob).where(ScrapeJob.id == job_id))
     job = result.scalar_one_or_none()
-
     if not job:
-        logger.warning(f"Scrape job not found: {job_id}")
         raise HTTPException(status_code=404, detail="Scrape job not found")
-
     return {
-        "id": str(job.id),
-        "platform": job.platform,
-        "keywords": job.keywords,
-        "status": job.status,
-        "started_at": job.started_at,
-        "completed_at": job.completed_at,
-        "leads_found": job.leads_found,
+        "id": str(job.id), "platform": job.platform, "keywords": job.keywords,
+        "status": job.status, "started_at": job.started_at,
+        "completed_at": job.completed_at, "leads_found": job.leads_found,
         "error_message": job.error_message,
     }

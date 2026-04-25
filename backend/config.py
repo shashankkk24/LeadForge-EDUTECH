@@ -25,11 +25,37 @@ class Settings:
     SMTP_PORT: int = int(os.getenv("SMTP_PORT", "465"))
     SMTP_USER: Optional[str] = os.getenv("SMTP_USER", None)
     SMTP_PASSWORD: Optional[str] = os.getenv("SMTP_PASSWORD", None)
+    SMTP_USE_SSL: bool = os.getenv("SMTP_USE_SSL", "true").lower() == "true"
+    SMTP_USE_TLS: bool = os.getenv("SMTP_USE_TLS", "false").lower() == "true"
 
-    # Reddit API
-    REDDIT_CLIENT_ID: Optional[str] = os.getenv("REDDIT_CLIENT_ID", None)
+    # LinkedIn
+    LINKEDIN_EMAIL: Optional[str] = os.getenv("LINKEDIN_EMAIL", None)
+    LINKEDIN_PASSWORD: Optional[str] = os.getenv("LINKEDIN_PASSWORD", None)
+    LINKEDIN_ACCESS_TOKEN: Optional[str] = os.getenv("LINKEDIN_ACCESS_TOKEN", None)
+
+    # Apify
+    APIFY_API_TOKEN: Optional[str] = os.getenv("APIFY_API_TOKEN", None)
+    APIFY_ACTOR_ID: Optional[str] = os.getenv("APIFY_ACTOR_ID", None)
+
+    # Browserbase
+    BROWSERBASE_API_KEY: Optional[str] = os.getenv("BROWSERBASE_API_KEY", "bb_live_bFUP_jIwIwxv8zQC8Bwa8qXdAkc")
+
+    # Reddit API (OAuth2 — bypasses IP rate limits)
+    REDDIT_CLIENT_ID:     Optional[str] = os.getenv("REDDIT_CLIENT_ID",     None)
     REDDIT_CLIENT_SECRET: Optional[str] = os.getenv("REDDIT_CLIENT_SECRET", None)
-    REDDIT_USER_AGENT: str = os.getenv("REDDIT_USER_AGENT", "LeadForgeEDU/1.0")
+    REDDIT_USERNAME:      str           = os.getenv("REDDIT_USERNAME",      "leadforge_bot")
+    REDDIT_USER_AGENT:    str           = os.getenv("REDDIT_USER_AGENT",    "LeadForgeEDU/1.0")
+
+    # Scraping targets and keywords
+    SCRAPE_TARGETS: str = os.getenv("SCRAPE_TARGETS", "reddit.com,linkedin.com,twitter.com")
+    SCRAPE_KEYWORDS: str = os.getenv("SCRAPE_KEYWORDS", "edtech,school management,student assessment")
+
+    # Feature flags
+    ENABLE_REDDIT_SCRAPER: bool = os.getenv("ENABLE_REDDIT_SCRAPER", "true").lower() == "true"
+    ENABLE_LINKEDIN_SCRAPER: bool = os.getenv("ENABLE_LINKEDIN_SCRAPER", "true").lower() == "true"
+    ENABLE_APIFY_SCRAPER: bool = os.getenv("ENABLE_APIFY_SCRAPER", "false").lower() == "true"
+    ENABLE_SELENIUM_SCRAPER: bool = os.getenv("ENABLE_SELENIUM_SCRAPER", "false").lower() == "true"
+    ENABLE_SMART_ENRICHMENT: bool = os.getenv("ENABLE_SMART_ENRICHMENT", "true").lower() == "true"
 
     # App config
     APP_NAME: str = "LeadForge EDU"
@@ -38,7 +64,7 @@ class Settings:
 
     # API
     API_PREFIX: str = "/api"
-    CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:5173"]
+    CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:5173", "http://localhost:5175"]
 
     @property
     def has_gemini_key(self) -> bool:

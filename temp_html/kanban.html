@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LeadForge EDU | Kanban Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-card": "#FFFFFF",
+                    "surface-container-highest": "#e4e2e4",
+                    "priority-hot": "#EF4444",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#7c839b",
+                    "surface-dim": "#dcd9db",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f6f3f5",
+                    "on-tertiary-container": "#b87500",
+                    "on-surface": "#1b1b1d",
+                    "inverse-primary": "#bec6e0",
+                    "surface-bright": "#fcf8fa",
+                    "outline-variant": "#c6c6cd",
+                    "tertiary-container": "#2a1700",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#000000",
+                    "status-drafted": "#8B5CF6",
+                    "secondary": "#0051d5",
+                    "background": "#fcf8fa",
+                    "primary": "#000000",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "status-closed": "#64748B",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-tint": "#565e74",
+                    "on-secondary-fixed": "#00174b",
+                    "priority-cold": "#3B82F6",
+                    "on-surface-variant": "#45464d",
+                    "on-error": "#ffffff",
+                    "primary-fixed-dim": "#bec6e0",
+                    "surface-bg": "#F8FAFC",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#fefcff",
+                    "primary-fixed": "#dae2fd",
+                    "secondary-fixed": "#dbe1ff",
+                    "status-contacted": "#10B981",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "inverse-surface": "#303032",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#f3f0f2",
+                    "surface": "#fcf8fa",
+                    "border-subtle": "#E2E8F0",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#e4e2e4",
+                    "surface-container-high": "#eae7e9",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "surface-container": "#f0edef",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#131b2e",
+                    "priority-warm": "#F97316",
+                    "status-new": "#6366F1",
+                    "on-primary-fixed": "#131b2e",
+                    "secondary-container": "#316bf3",
+                    "on-background": "#1b1b1d",
+                    "on-tertiary-fixed": "#2a1700",
+                    "outline": "#76777d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap": "0.75rem",
+                    "container-margin": "2rem",
+                    "gutter": "1.5rem",
+                    "card-padding": "1.25rem",
+                    "section-gap": "2.5rem"
+            },
+            "fontFamily": {
+                    "h2": ["manrope"],
+                    "data-mono": ["space-grotesk"],
+                    "body-sm": ["inter"],
+                    "body-base": ["inter"],
+                    "h1": ["manrope"],
+                    "h3": ["manrope"],
+                    "label-caps": ["inter"]
+            },
+            "fontSize": {
+                    "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "data-mono": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "body-sm": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-base": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "h3": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-glow {
+            box-shadow: 0 0 15px -3px rgba(37, 99, 235, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-surface-bg font-body-base text-on-surface overflow-hidden">
+<!-- Sidebar Component (SideNavBar) -->
+<aside class="fixed left-0 top-0 h-full w-64 border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex flex-col h-screen p-4 gap-2 z-40">
+<div class="flex items-center gap-3 px-2 mb-6">
+<div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-lg">psychology</span>
+</div>
+<div>
+<h2 class="text-lg font-black text-slate-900 dark:text-white leading-tight">LeadForge EDU</h2>
+<p class="text-[10px] font-bold uppercase tracking-widest text-slate-500">AI Sales Engine</p>
+</div>
+</div>
+<button class="mb-4 w-full bg-blue-600 text-white font-manrope text-sm font-semibold py-2.5 rounded-lg active:scale-95 transition-all duration-150 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'wght' 600;">add</span>
+            New Pipeline
+        </button>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg font-manrope text-sm font-semibold active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg font-manrope text-sm font-semibold active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="search_insights">search_insights</span>
+                Lead Scraper
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg font-manrope text-sm font-semibold active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+                Intelligence
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg font-manrope text-sm font-semibold active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+                Outreach
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg font-manrope text-sm font-semibold active:scale-95 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+                Analytics
+            </a>
+</nav>
+<div class="mt-auto border-t border-slate-200 dark:border-slate-800 pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg font-manrope text-sm font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-lg font-manrope text-sm font-semibold" href="#">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+                Account
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex flex-col h-screen">
+<!-- Header Component (TopNavBar) -->
+<header class="sticky top-0 z-30 flex justify-between items-center px-6 h-16 w-full bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<h1 class="font-h2 text-h2 text-slate-900 dark:text-white">Pipeline Overview</h1>
+<div class="h-6 w-px bg-slate-200 mx-2"></div>
+<div class="flex items-center gap-2 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full">
+<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+<span class="font-label-caps text-label-caps font-bold">Scraping Live...</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg text-sm w-64 focus:ring-2 focus:ring-blue-500 outline-none transition-all" placeholder="Search leads..." type="text"/>
+</div>
+<button class="flex items-center justify-center p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="flex items-center justify-center p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="flex items-center gap-3 ml-2 pl-4 border-l border-slate-200">
+<img class="w-8 h-8 rounded-full border border-slate-200" data-alt="Professional user profile headshot with a friendly smile, studio lighting, corporate background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCoheLFtf0NLSPxnaSkWV0xb-jED5XnrQjcpK27RBk4ZutvekWUdTTU1DK7FjLpLFcGWktFByg9w-HNVvHb0qGp6W3R05oW3p7k2x3UbxNILw2uK77pxP5pYBCtP3IEKDO-O3pjIMTJZiWsYZvlPkXV40Rxa_Y-b_S5YuFHhdA9Adbfi8r6DCJwdzl9RCpwoH7qJE1zve4DJBuprf3QQIBLsKQqgjAL3Nx1M6G7lbLewNQY9eOIYinUaWKeL03O_qUZLY5A-GpfMM"/>
+</div>
+</div>
+</header>
+<!-- Kanban Board Container -->
+<div class="flex-1 overflow-x-auto bg-surface-bg p-6">
+<div class="flex gap-6 h-full min-w-max">
+<!-- Column: New -->
+<div class="w-80 flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-new"></span>
+<h3 class="font-h3 text-h3">New</h3>
+<span class="ml-1 text-slate-400 text-xs font-bold bg-slate-100 px-2 py-0.5 rounded-full">4</span>
+</div>
+<button class="text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-3 h-full overflow-y-auto">
+<!-- Card 1 -->
+<div class="bg-surface-card p-card-padding rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-red-50 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-red-600">alternate_email</span>
+</div>
+<span class="font-manrope text-sm font-bold">r/EdTech_Mastery</span>
+</div>
+<span class="bg-priority-hot/10 text-priority-hot font-label-caps text-label-caps px-2 py-1 rounded">HOT</span>
+</div>
+<p class="text-on-surface font-manrope font-semibold text-sm mb-1">u/LearningArchitect</p>
+<p class="text-on-surface-variant text-body-sm line-clamp-2 mb-4">Looking for a scalable solution for corporate training pipelines. Budget approved.</p>
+<div class="flex items-center justify-between pt-3 border-t border-slate-50">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-blue-600 text-[16px]">bolt</span>
+<span class="font-data-mono text-data-mono text-blue-600">HEAT: 94</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">2m ago</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-card p-card-padding rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-sky-50 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-sky-600">chat</span>
+</div>
+<span class="font-manrope text-sm font-bold">X (Twitter)</span>
+</div>
+<span class="bg-priority-warm/10 text-priority-warm font-label-caps text-label-caps px-2 py-1 rounded">WARM</span>
+</div>
+<p class="text-on-surface font-manrope font-semibold text-sm mb-1">@SarahTeachTech</p>
+<p class="text-on-surface-variant text-body-sm line-clamp-2 mb-4">Anyone know of an AI lead gen tool that understands Higher Ed nuances?</p>
+<div class="flex items-center justify-between pt-3 border-t border-slate-50">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-blue-600 text-[16px]">bolt</span>
+<span class="font-data-mono text-data-mono text-blue-600">HEAT: 78</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">14m ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Drafted -->
+<div class="w-80 flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-drafted"></span>
+<h3 class="font-h3 text-h3">Drafted</h3>
+<span class="ml-1 text-slate-400 text-xs font-bold bg-slate-100 px-2 py-0.5 rounded-full">2</span>
+</div>
+<button class="text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-3 h-full overflow-y-auto">
+<!-- Card 3 -->
+<div class="bg-surface-card p-card-padding rounded-xl border-l-4 border-l-status-drafted border border-border-subtle shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-red-50 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-red-600">alternate_email</span>
+</div>
+<span class="font-manrope text-sm font-bold">r/SaaS_Sales</span>
+</div>
+<span class="bg-priority-hot/10 text-priority-hot font-label-caps text-label-caps px-2 py-1 rounded">HOT</span>
+</div>
+<p class="text-on-surface font-manrope font-semibold text-sm mb-1">u/VP_Sales_EDU</p>
+<p class="text-on-surface-variant text-body-sm line-clamp-2 mb-4">Drafting response targeting their specific pain point on enrollment decline.</p>
+<div class="flex items-center justify-between pt-3 border-t border-slate-50">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-blue-600 text-[16px]">bolt</span>
+<span class="font-data-mono text-data-mono text-blue-600">HEAT: 98</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-status-drafted text-[14px]">edit_note</span>
+<span class="text-[10px] text-slate-400 font-medium">Ready</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Contacted -->
+<div class="w-80 flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-contacted"></span>
+<h3 class="font-h3 text-h3">Contacted</h3>
+<span class="ml-1 text-slate-400 text-xs font-bold bg-slate-100 px-2 py-0.5 rounded-full">8</span>
+</div>
+<button class="text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-3 h-full overflow-y-auto">
+<!-- Card 4 -->
+<div class="bg-surface-card p-card-padding rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-sky-50 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-sky-600">chat</span>
+</div>
+<span class="font-manrope text-sm font-bold">X (Twitter)</span>
+</div>
+<span class="bg-priority-cold/10 text-priority-cold font-label-caps text-label-caps px-2 py-1 rounded">COLD</span>
+</div>
+<p class="text-on-surface font-manrope font-semibold text-sm mb-1">@DigitalDean</p>
+<p class="text-on-surface-variant text-body-sm line-clamp-2 mb-4">Follow-up sent. Waiting for scheduling link for the demo.</p>
+<div class="flex items-center justify-between pt-3 border-t border-slate-50">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-blue-600 text-[16px]">bolt</span>
+<span class="font-data-mono text-data-mono text-blue-600">HEAT: 42</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">1h ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Closed -->
+<div class="w-80 flex flex-col gap-4">
+<div class="flex items-center justify-between px-2">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-closed"></span>
+<h3 class="font-h3 text-h3">Closed</h3>
+<span class="ml-1 text-slate-400 text-xs font-bold bg-slate-100 px-2 py-0.5 rounded-full">12</span>
+</div>
+<button class="text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined text-lg">more_horiz</span></button>
+</div>
+<div class="flex flex-col gap-3 h-full overflow-y-auto">
+<!-- Card 5 (Closed Success) -->
+<div class="bg-surface-card p-card-padding rounded-xl border border-border-subtle shadow-sm opacity-60 grayscale-[0.5]">
+<div class="flex justify-between items-start mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 bg-slate-100 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-slate-500">check_circle</span>
+</div>
+<span class="font-manrope text-sm font-bold">r/CollegeAdmin</span>
+</div>
+<span class="bg-slate-100 text-slate-600 font-label-caps text-label-caps px-2 py-1 rounded">CLOSED</span>
+</div>
+<p class="text-on-surface font-manrope font-semibold text-sm mb-1">u/Dean_of_Tech</p>
+<p class="text-on-surface-variant text-body-sm line-clamp-2 mb-4">Contract signed. Onboarding set for next Monday.</p>
+<div class="flex items-center justify-between pt-3 border-t border-slate-50">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-slate-400 text-[16px]">bolt</span>
+<span class="font-data-mono text-data-mono text-slate-400">HEAT: --</span>
+</div>
+<span class="text-[10px] text-slate-400 font-medium">3h ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Add New Column -->
+<button class="w-80 h-16 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center gap-2 text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-all font-manrope font-semibold">
+<span class="material-symbols-outlined">add</span>
+                    Add Status Column
+                </button>
+</div>
+</div>
+</main>
+<!-- Floating AI Intelligence Modal (Bottom Right) -->
+<div class="fixed bottom-6 right-6 w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col z-50">
+<div class="bg-primary-container p-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-white font-manrope font-bold text-sm">Lead Intelligence Summary</span>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-xl object-cover" data-alt="Portrait of a young executive, smiling, wearing professional attire against a blurred office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL9aD0ISQfrnoK-Vk8sARC48l19vfsL5mUnxcUB_9bvBxQb7ZZCb5Joe6T_ztU7wBlQHYkkUMARGtxKwmNRo6zyKeP_xx94Nn146qjtiWKkBPmqCszhjIsDhPoBUAG6--O3MLAzX47Py5ck43A7h48gDwSpRy5MlvWP91cATpPQjBc7eglu845IN8Uh_TG7EHrlqqtImiPGrKvEpVJDaOIgkrspyO7pBCUgNCwlkUIoyjkRQD-lQgLTXu1wd9dofUGp25QTAO6VRY"/>
+<div>
+<h4 class="font-manrope font-bold text-sm">u/LearningArchitect</h4>
+<p class="text-xs text-slate-500">Corporate Training Lead</p>
+</div>
+<div class="ml-auto bg-emerald-50 text-emerald-600 px-2 py-1 rounded text-[10px] font-bold">94% MATCH</div>
+</div>
+<div class="space-y-3">
+<div class="p-3 bg-slate-50 rounded-lg">
+<span class="font-label-caps text-label-caps text-slate-500 block mb-1">TOP PAIN POINT</span>
+<p class="text-body-sm text-on-surface">Scaling employee onboarding without increasing HR headcount by 30%.</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-1 rounded-full border border-blue-100">psychology_of_spending</span>
+<span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-1 rounded-full border border-blue-100">authority_figure</span>
+<span class="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-1 rounded-full border border-blue-100">urgent_timeline</span>
+</div>
+</div>
+<button class="w-full bg-blue-600 text-white font-manrope text-sm font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20">
+                Generate Outreach Script
+            </button>
+</div>
+</div>
+</body></html>

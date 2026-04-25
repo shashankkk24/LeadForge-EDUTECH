@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;family=Space+Grotesk:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-card": "#FFFFFF",
+                      "surface-container-highest": "#e4e2e4",
+                      "priority-hot": "#EF4444",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#7c839b",
+                      "surface-dim": "#dcd9db",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f6f3f5",
+                      "on-tertiary-container": "#b87500",
+                      "on-surface": "#1b1b1d",
+                      "inverse-primary": "#bec6e0",
+                      "surface-bright": "#fcf8fa",
+                      "outline-variant": "#c6c6cd",
+                      "tertiary-container": "#2a1700",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#000000",
+                      "status-drafted": "#8B5CF6",
+                      "secondary": "#0051d5",
+                      "background": "#fcf8fa",
+                      "primary": "#000000",
+                      "on-secondary-fixed-variant": "#003ea8",
+                      "status-closed": "#64748B",
+                      "tertiary-fixed": "#ffddb8",
+                      "surface-tint": "#565e74",
+                      "on-secondary-fixed": "#00174b",
+                      "priority-cold": "#3B82F6",
+                      "on-surface-variant": "#45464d",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#bec6e0",
+                      "surface-bg": "#F8FAFC",
+                      "error": "#ba1a1a",
+                      "on-secondary-container": "#fefcff",
+                      "primary-fixed": "#dae2fd",
+                      "secondary-fixed": "#dbe1ff",
+                      "status-contacted": "#10B981",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "on-primary-fixed-variant": "#3f465c",
+                      "inverse-surface": "#303032",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#f3f0f2",
+                      "surface": "#fcf8fa",
+                      "border-subtle": "#E2E8F0",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-variant": "#e4e2e4",
+                      "surface-container-high": "#eae7e9",
+                      "secondary-fixed-dim": "#b4c5ff",
+                      "surface-container": "#f0edef",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#131b2e",
+                      "priority-warm": "#F97316",
+                      "status-new": "#6366F1",
+                      "on-primary-fixed": "#131b2e",
+                      "secondary-container": "#316bf3",
+                      "on-background": "#1b1b1d",
+                      "on-tertiary-fixed": "#2a1700",
+                      "outline": "#76777d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-gap": "0.75rem",
+                      "container-margin": "2rem",
+                      "gutter": "1.5rem",
+                      "card-padding": "1.25rem",
+                      "section-gap": "2.5rem"
+              },
+              "fontFamily": {
+                      "h2": ["manrope"],
+                      "data-mono": ["space-grotesk"],
+                      "body-sm": ["inter"],
+                      "body-base": ["inter"],
+                      "h1": ["manrope"],
+                      "h3": ["manrope"],
+                      "label-caps": ["inter"]
+              },
+              "fontSize": {
+                      "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "data-mono": ["13px", {"lineHeight": "1", "fontWeight": "500"}],
+                      "body-sm": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-base": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h3": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "label-caps": ["11px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-surface-bg font-body-base text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-64 border-r border-slate-200 bg-slate-50 dark:bg-slate-950 flex flex-col h-screen p-4 gap-2 z-40">
+<div class="flex items-center gap-3 px-2 py-4 mb-6">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-slate-900 dark:text-white leading-none">LeadForge EDU</h1>
+<p class="font-manrope text-xs font-semibold text-blue-600 dark:text-blue-500 uppercase tracking-wider">AI Sales Engine</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg font-manrope text-sm font-semibold transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="search_insights" style="font-variation-settings: 'FILL' 1;">search_insights</span> Lead Scraper
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span> Intelligence
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span> Outreach
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span> Analytics
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800 space-y-1">
+<button class="w-full bg-blue-600 text-white py-2.5 rounded-lg font-manrope text-sm font-bold flex items-center justify-center gap-2 mb-4 active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[18px]">add</span> New Pipeline
+            </button>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span> Support
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 dark:text-slate-400 font-manrope text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-900" href="#">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span> Account
+            </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 min-h-screen">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-50 flex justify-between items-center px-6 h-16 w-full bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" placeholder="Search keywords or active jobs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-blue-600 text-white px-4 py-2 rounded-lg font-manrope text-sm font-medium tracking-tight active:scale-95 duration-150">
+                    Start Scrape
+                </button>
+<div class="flex items-center gap-2 border-l border-slate-200 dark:border-slate-800 ml-2 pl-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 overflow-hidden ml-2 ring-2 ring-slate-100">
+<img alt="User Profile" data-alt="Professional headshot of a business executive in a clean studio setting with neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCe5ry5gWryEtYB47kbdqtDfkZevPqX-To0Hh_sssEh7dGGNTgYl0swq8_2m8Ga4e8OykKMH-y3vpA8SBxXYBZGWY965CoD7XuYnTRh5hVSSe1Bed9N2e_GNCXYBGK3SSlZRhIQnlY2FJfBPbuECjUXf917fY-bSRKz_STtx751csyJyV6wzaDMfB_gnCtDvuTQxyv-EDpr0tlrVKDFBHgeFfv9Qy3v3RRrs0jq4cylVmVVu84uODfH2-Xhj9kLTQg4e1G0-nPKcs"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-6 max-w-7xl mx-auto space-y-6">
+<!-- Header Section -->
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+<span class="font-label-caps text-status-contacted">SYSTEMS ONLINE</span>
+</div>
+<h2 class="font-h1 text-h1 text-slate-900">Scrape Control Center</h2>
+<p class="text-slate-500 font-body-base">Configure triggers and monitor real-time lead ingestion</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-border-subtle rounded-lg font-manrope text-sm font-semibold hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-lg">history</span> View Full Logs
+                    </button>
+<button class="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg font-manrope text-h3 font-bold shadow-lg shadow-blue-500/20 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_circle</span> Start Live Scrape
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Configuration Panel (Left) -->
+<div class="col-span-12 lg:col-span-5 space-y-6">
+<!-- Keyword Triggers Card -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-card-padding shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-h3 text-h3">Keyword Triggers</h3>
+<button class="text-blue-600 text-sm font-bold hover:underline">+ Add New</button>
+</div>
+<div class="space-y-3">
+<div class="flex flex-wrap gap-2">
+<span class="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 text-sm font-medium">
+                                    "LMS for K-12" <button class="material-symbols-outlined text-sm">close</button>
+</span>
+<span class="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 text-sm font-medium">
+                                    "grading software" <button class="material-symbols-outlined text-sm">close</button>
+</span>
+<span class="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 text-sm font-medium">
+                                    "EdTech procurement" <button class="material-symbols-outlined text-sm">close</button>
+</span>
+<span class="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 text-sm font-medium">
+                                    "Canvas integration" <button class="material-symbols-outlined text-sm">close</button>
+</span>
+</div>
+<div class="pt-4 mt-2 border-t border-slate-100">
+<label class="font-label-caps text-slate-400 mb-2 block">QUICK TEMPLATES</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="text-left p-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:border-blue-400 transition-colors">School Admin Pain Points</button>
+<button class="text-left p-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:border-blue-400 transition-colors">University RFP Alerts</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Platform Toggles Card -->
+<div class="bg-surface-card border border-border-subtle rounded-xl p-card-padding shadow-sm">
+<h3 class="font-h3 text-h3 mb-4">Platform Sources</h3>
+<div class="space-y-4">
+<!-- Platform Item -->
+<div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-red-100 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-red-600">forum</span>
+</div>
+<div>
+<p class="font-semibold text-sm">Reddit Communities</p>
+<p class="text-xs text-slate-500">Monitoring 42 subreddits</p>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+</div>
+</div>
+<!-- Platform Item -->
+<div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-slate-900 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-white">alternate_email</span>
+</div>
+<div>
+<p class="font-semibold text-sm">X (formerly Twitter)</p>
+<p class="text-xs text-slate-500">Real-time keyword streaming</p>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+</div>
+</div>
+<!-- Platform Item -->
+<div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-amber-100 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-amber-600">groups</span>
+</div>
+<div>
+<p class="font-semibold text-sm">Educational Forums</p>
+<p class="text-xs text-slate-500">Monitoring 12 industry boards</p>
+</div>
+</div>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Feed (Right) -->
+<div class="col-span-12 lg:col-span-7">
+<div class="bg-primary-container border border-slate-800 rounded-xl flex flex-col h-full shadow-2xl overflow-hidden min-h-[500px]">
+<div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+<div class="flex items-center gap-3">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+</span>
+<h3 class="font-h3 text-h3 text-white">Live WebSocket Feed</h3>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-slate-800 text-slate-400 px-2 py-1 rounded text-[10px] font-mono">1.2k bps</span>
+<span class="text-slate-400 text-xs">Uptime: 14h 22m</span>
+</div>
+</div>
+<!-- Scrollable Feed Area -->
+<div class="flex-1 p-4 overflow-y-auto space-y-4 font-data-mono">
+<!-- Feed Item -->
+<div class="bg-slate-900/50 border-l-2 border-emerald-500 p-4 rounded-r-lg">
+<div class="flex justify-between items-start mb-2">
+<span class="text-emerald-400 text-xs">NEW_LEAD_DETECTED</span>
+<span class="text-slate-500 text-xs">14:22:01</span>
+</div>
+<p class="text-slate-200 text-sm mb-2"><span class="text-blue-400">@teach_tech:</span> "We're looking to switch our current LMS. Too many bugs in the grading module..."</p>
+<div class="flex gap-2">
+<span class="bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded text-[10px] uppercase">reddit /r/k12sysadmin</span>
+<span class="bg-priority-hot/20 text-priority-hot px-2 py-0.5 rounded text-[10px] uppercase">Hot Lead (88%)</span>
+</div>
+</div>
+<!-- Feed Item -->
+<div class="bg-slate-900/50 border-l-2 border-blue-500 p-4 rounded-r-lg">
+<div class="flex justify-between items-start mb-2">
+<span class="text-blue-400 text-xs">KEYWORD_MATCH</span>
+<span class="text-slate-500 text-xs">14:21:45</span>
+</div>
+<p class="text-slate-200 text-sm mb-2"><span class="text-blue-400">Principal_Jones:</span> "Any schools using automated grading software for high school math?"</p>
+<div class="flex gap-2">
+<span class="bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded text-[10px] uppercase">X (Twitter)</span>
+<span class="bg-priority-warm/20 text-priority-warm px-2 py-0.5 rounded text-[10px] uppercase">Warm Lead (72%)</span>
+</div>
+</div>
+<!-- Feed Item -->
+<div class="bg-slate-900/50 border-l-2 border-slate-700 p-4 rounded-r-lg opacity-60">
+<div class="flex justify-between items-start mb-2">
+<span class="text-slate-400 text-xs">SYSTEM_SCAN</span>
+<span class="text-slate-500 text-xs">14:20:12</span>
+</div>
+<p class="text-slate-400 text-sm">Crawling 14 pending URLs for "EdTech procurement"...</p>
+</div>
+<!-- Feed Item -->
+<div class="bg-slate-900/50 border-l-2 border-emerald-500 p-4 rounded-r-lg">
+<div class="flex justify-between items-start mb-2">
+<span class="text-emerald-400 text-xs">NEW_LEAD_DETECTED</span>
+<span class="text-slate-500 text-xs">14:19:58</span>
+</div>
+<p class="text-slate-200 text-sm mb-2"><span class="text-blue-400">EduInnovator:</span> "Need recommendations for LMS that integrates with Canvas API smoothly."</p>
+<div class="flex gap-2">
+<span class="bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded text-[10px] uppercase">reddit /r/edtech</span>
+<span class="bg-priority-hot/20 text-priority-hot px-2 py-0.5 rounded text-[10px] uppercase">Hot Lead (94%)</span>
+</div>
+</div>
+</div>
+<div class="p-4 bg-slate-900 border-t border-slate-800">
+<div class="flex items-center gap-2">
+<span class="text-slate-500 text-xs font-mono">$</span>
+<input class="bg-transparent border-none text-slate-400 font-mono text-xs w-full focus:ring-0" readonly="" type="text" value="tail -f /logs/live_scrape_edu_leads.log"/>
+</div>
+</div>
+</div>
+</div>
+<!-- History Table (Bottom Full Width) -->
+<div class="col-span-12">
+<div class="bg-surface-card border border-border-subtle rounded-xl shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-border-subtle flex justify-between items-center">
+<h3 class="font-h3 text-h3">Scrape Job History</h3>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-slate-100 rounded-lg text-slate-500"><span class="material-symbols-outlined">filter_list</span></button>
+<button class="p-2 hover:bg-slate-100 rounded-lg text-slate-500"><span class="material-symbols-outlined">download</span></button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-slate-50 text-slate-500 font-label-caps border-b border-border-subtle">
+<th class="px-6 py-4 font-semibold">Job ID</th>
+<th class="px-6 py-4 font-semibold">Configuration</th>
+<th class="px-6 py-4 font-semibold">Duration</th>
+<th class="px-6 py-4 font-semibold">Leads Found</th>
+<th class="px-6 py-4 font-semibold">Hot Leads</th>
+<th class="px-6 py-4 font-semibold">Status</th>
+<th class="px-6 py-4 font-semibold">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 font-data-mono text-sm">#JOB-8821</td>
+<td class="px-6 py-4">
+<p class="text-sm font-semibold">Q3 LMS Research</p>
+<p class="text-xs text-slate-500">Reddit, X | 4 keywords</p>
+</td>
+<td class="px-6 py-4 text-sm">4h 12m</td>
+<td class="px-6 py-4 font-bold text-blue-600">142</td>
+<td class="px-6 py-4">
+<span class="bg-priority-hot/10 text-priority-hot px-2 py-0.5 rounded-full text-xs font-bold">28 Hot</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs font-bold">COMPLETED</span>
+</td>
+<td class="px-6 py-4">
+<button class="text-blue-600 hover:text-blue-800 text-sm font-bold">Results</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 font-data-mono text-sm">#JOB-8819</td>
+<td class="px-6 py-4">
+<p class="text-sm font-semibold">K-12 Software Scan</p>
+<p class="text-xs text-slate-500">Forums | 2 keywords</p>
+</td>
+<td class="px-6 py-4 text-sm">12h 00m</td>
+<td class="px-6 py-4 font-bold text-blue-600">89</td>
+<td class="px-6 py-4">
+<span class="bg-priority-hot/10 text-priority-hot px-2 py-0.5 rounded-full text-xs font-bold">12 Hot</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs font-bold">COMPLETED</span>
+</td>
+<td class="px-6 py-4">
+<button class="text-blue-600 hover:text-blue-800 text-sm font-bold">Results</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4 font-data-mono text-sm">#JOB-8818</td>
+<td class="px-6 py-4">
+<p class="text-sm font-semibold">Admin Pain Points</p>
+<p class="text-xs text-slate-500">Reddit | 6 keywords</p>
+</td>
+<td class="px-6 py-4 text-sm">2h 45m</td>
+<td class="px-6 py-4 font-bold text-blue-600">214</td>
+<td class="px-6 py-4">
+<span class="bg-priority-hot/10 text-priority-hot px-2 py-0.5 rounded-full text-xs font-bold">45 Hot</span>
+</td>
+<td class="px-6 py-4">
+<span class="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs font-bold">ARCHIVED</span>
+</td>
+<td class="px-6 py-4">
+<button class="text-blue-600 hover:text-blue-800 text-sm font-bold">Results</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-slate-50 border-t border-border-subtle text-center">
+<button class="text-sm font-bold text-blue-600 hover:underline">View All 156 Past Jobs</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Only for Scrape Control Center) -->
+<div class="fixed bottom-8 right-8">
+<button class="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-2xl hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all group">
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform duration-500">sync</span>
+<span class="font-manrope font-bold">Resume Global Sync</span>
+</button>
+</div>
+</body></html>
