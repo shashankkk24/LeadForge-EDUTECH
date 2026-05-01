@@ -21,6 +21,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import get_settings
 from models import ScrapeJob
+from services.linkedin_scraper_service import scrape_linkedin
+from services.twitter_scraper_service import scrape_twitter
 
 logger   = logging.getLogger(__name__)
 settings = get_settings()
@@ -52,9 +54,35 @@ CHROME_UA = (
 )
 
 
+# ── Buyer intent signals — people who NEED to buy, not sell ──────────────────
+BUYER_INTENT_SIGNALS = [
+    "looking for", "need a", "need an", "recommend", "recommendation",
+    "suggestions", "anyone use", "has anyone", "which software", "what software",
+    "help with", "struggling with", "frustrated with", "problem with",
+    "issue with", "replacing", "evaluating", "comparing", "shortlisting",
+    "rfp", "budget approved", "procurement", "vendor", "demo",
+    "manual process", "spreadsheet", "outdated", "broken", "crashes",
+    "can't find", "difficult to", "pain point", "challenge", "nightmare",
+    "urgently need", "asap", "end of life", "migrate", "upgrade",
+    "still using", "old system", "current system", "switch from",
+]
+
+# Seller/marketing signals — exclude these posts
+SELLER_SIGNALS = [
+    "we offer", "we provide", "our product", "our solution", "our platform",
+    "introducing", "announcing", "sign up", "free trial", "get started",
+    "contact us", "book a demo", "schedule a demo", "try our", "buy now",
+    "we help schools", "we help teachers", "we built", "we launched",
+    "proud to announce", "excited to share", "check out our",
+]
+
 def _is_relevant(text: str) -> bool:
+    """Only accept posts showing intent to BUY or expressing a school software pain point."""
     lower = text.lower()
-    return any(kw in lower for kw in EDTECH_KEYWORDS)
+    has_edtech = any(kw in lower for kw in EDTECH_KEYWORDS)
+    has_intent = any(kw in lower for kw in BUYER_INTENT_SIGNALS)
+    is_seller  = any(kw in lower for kw in SELLER_SIGNALS)
+    return has_edtech and has_intent and not is_seller
 
 
 # ── Method 1: Reddit OAuth2 (bypasses IP rate limits) ────────────────────────
@@ -242,13 +270,23 @@ class ScraperService:
 
     async def scrape(self, platform: str, keywords: List[str], limit: int = 10) -> List[dict]:
         """
-        Scrape Reddit for EdTech leads.
+        Scrape for EdTech leads.
 
-        Pipeline:
+        For reddit:
           1. Try OAuth2 (if credentials configured) — no rate limits
           2. Try direct JSON API with Chrome UA (user-specified method)
           3. Fall back to curated realistic leads with real Reddit search URLs
+
+        For linkedin:
+          1. Try Apify LinkedIn scraper (if APIFY_API_TOKEN configured)
+          2. Fall back to curated realistic LinkedIn leads
         """
+        if platform == "linkedin":
+            return await scrape_linkedin(limit=limit)
+
+        if platform == "twitter":
+            return await scrape_twitter(limit=limit)
+
         loop = asyncio.get_running_loop()
 
         # ── Try OAuth2 first ──

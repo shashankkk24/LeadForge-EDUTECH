@@ -6,6 +6,10 @@ Loads environment variables and provides app configuration.
 import os
 from functools import lru_cache
 from typing import Optional
+from dotenv import load_dotenv
+
+# Load .env file
+load_dotenv()
 
 
 class Settings:

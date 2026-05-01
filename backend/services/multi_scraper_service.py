@@ -510,15 +510,98 @@ class MultiSourceScraperService:
     async def _scrape_apify(
         self, keywords: List[str], limit: int
     ) -> List[Dict[str, Any]]:
-        """Scrape using Apify."""
+        """Scrape using Apify — Google search + LinkedIn + Twitter."""
         leads = []
         try:
             for keyword in keywords:
-                results = await self.apify_scraper.scrape_search_results(keyword, limit)
-                leads.extend(results)
+                # ── Existing Google search actor (unchanged) ──
+                try:
+                    results = await self.apify_scraper.scrape_search_results(keyword, limit)
+                    leads.extend(results)
+                except Exception as e:
+                    logger.error(f"Apify Google search failed for '{keyword}': {e}")
+
+                # ── LinkedIn actor ──
+                try:
+                    li_results = await self.apify_scraper.scrape_with_actor(
+                        "61RPP7dywgAH6w8nL",
+                        {"searchQuery": keyword, "maxResults": limit},
+                    )
+                    for item in li_results:
+                        # Extract the real LinkedIn post URL from actor output
+                        post_url = (
+                            item.get("linkedinUrl") or
+                            item.get("postUrl") or
+                            item.get("url") or
+                            item.get("link") or
+                            f"https://www.linkedin.com/search/results/content/?keywords={keyword.replace(' ', '%20')}"
+                        )
+                        content = (
+                            item.get("content") or
+                            item.get("text") or
+                            item.get("postContent") or
+                            item.get("description") or
+                            item.get("title") or ""
+                        )
+                        author = (
+                            item.get("authorName") or
+                            (item.get("author", {}).get("name") if isinstance(item.get("author"), dict) else item.get("author")) or
+                            item.get("name") or
+                            "linkedin_user"
+                        )
+                        leads.append({
+                            "platform":     "linkedin_apify",
+                            "username":     str(author).replace(" ", "_").lower()[:80],
+                            "post_url":     post_url,
+                            "post_content": str(content)[:2000],
+                            "extracted_at": datetime.utcnow(),
+                        })
+                    logger.info(f"Apify LinkedIn '{keyword}': {len(li_results)} results")
+                except Exception as e:
+                    logger.error(f"Apify LinkedIn failed for '{keyword}': {e}")
+
+                # ── Twitter/X actor ──
+                try:
+                    tw_results = await self.apify_scraper.scrape_with_actor(
+                        "apidojo/twitter-scraper",
+                        {"searchTerms": [keyword], "maxTweets": limit},
+                    )
+                    for item in tw_results:
+                        # Build real tweet URL from id + username
+                        tweet_id = item.get("id") or item.get("tweetId") or item.get("rest_id") or ""
+                        username  = (
+                            (item.get("author", {}).get("userName") if isinstance(item.get("author"), dict) else None) or
+                            item.get("username") or
+                            (item.get("user", {}).get("screen_name") if isinstance(item.get("user"), dict) else None) or
+                            "twitter_user"
+                        )
+                        if tweet_id and username and username != "twitter_user":
+                            post_url = f"https://twitter.com/{username}/status/{tweet_id}"
+                        else:
+                            post_url = (
+                                item.get("url") or
+                                item.get("tweetUrl") or
+                                f"https://twitter.com/search?q={keyword.replace(' ', '%20')}&f=live"
+                            )
+                        content = (
+                            item.get("text") or
+                            item.get("full_text") or
+                            item.get("tweetText") or ""
+                        )
+                        leads.append({
+                            "platform":     "twitter_apify",
+                            "username":     str(username).lstrip("@")[:80],
+                            "post_url":     post_url,
+                            "post_content": str(content)[:2000],
+                            "extracted_at": datetime.utcnow(),
+                        })
+                    logger.info(f"Apify Twitter '{keyword}': {len(tw_results)} results")
+                except Exception as e:
+                    logger.error(f"Apify Twitter failed for '{keyword}': {e}")
+
         except Exception as e:
             logger.error(f"Apify scraping failed: {e}")
-        
+
         return leads
 
     async def _save_leads(
